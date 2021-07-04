@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Авторы">
+    <Key>
+      <PropertyRef Name="id_автора" />
+    </Key>
+    <Property Name="id_автора" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Автор" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Книги" Relationship="Self.FK_Книги_Авторы" FromRole="Авторы" ToRole="Книги" />
+  </EntityType>
+  <EntityType Name="Книги">
+    <Key>
+      <PropertyRef Name="id_книги" />
+    </Key>
+    <Property Name="id_книги" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Название" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Автор" Type="Int32" Nullable="false" />
+    <Property Name="Цена" Type="Int32" Nullable="false" />
+    <Property Name="Количество_магазин" Type="Int32" Nullable="false" />
+    <Property Name="Количество_склад" Type="Int32" Nullable="false" />
+    <Property Name="Обложка" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Авторы" Relationship="Self.FK_Книги_Авторы" FromRole="Книги" ToRole="Авторы" />
+  </EntityType>
+  <EntityType Name="Пользователи">
+    <Key>
+      <PropertyRef Name="Имя" />
+      <PropertyRef Name="Пароль" />
+    </Key>
+    <Property Name="Имя" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Пароль" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Книги_Авторы">
+    <End Role="Авторы" Type="Self.Авторы" Multiplicity="1" />
+    <End Role="Книги" Type="Self.Книги" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Авторы">
+        <PropertyRef Name="id_автора" />
+      </Principal>
+      <Dependent Role="Книги">
+        <PropertyRef Name="Автор" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Авторы" EntityType="Self.Авторы" />
+    <EntitySet Name="Книги" EntityType="Self.Книги" />
+    <EntitySet Name="Пользователи" EntityType="Self.Пользователи" />
+    <AssociationSet Name="FK_Книги_Авторы" Association="Self.FK_Книги_Авторы">
+      <End Role="Авторы" EntitySet="Авторы" />
+      <End Role="Книги" EntitySet="Книги" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
